@@ -1,0 +1,100 @@
+//ЛАБА 2
+//ЗАДАНИЕ 1
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main() {
+    setlocale(LC_ALL, "RU");
+
+    const int SIZE = 50;
+    int A[SIZE];
+
+    srand(time(0));  // Инициализация генератора случайных чисел
+
+    // Заполняем массив случайными числами от -50 до 50
+    for (int* ptr = A; ptr < A + SIZE; ptr++) {
+        *ptr = rand() % 101 - 50;
+    }
+
+    // Выводим массив
+    cout << "Массив: ";
+    for (int* ptr = A; ptr < A + SIZE; ptr++) {
+        cout << *ptr << " ";
+    }
+    cout << endl;
+
+    // Переменные для поиска первого числа, кратного 11
+    int first = 0, result = 0;
+    bool foundFirst = false;
+    int count = 0;  // Счетчик чисел, кратных 11
+
+    for (int* ptr = A; ptr < A + SIZE; ptr++) {
+        if (*ptr > 0 && *ptr % 11 == 0) {
+            count++;  // Увеличиваем счетчик
+            if (!foundFirst) {
+                first = *ptr;  // Сохраняем первое найденное число
+                result = first;  // Инициализируем результат первым числом
+                foundFirst = true;
+            }
+            else {
+                result -= *ptr;  // Отнимаем все последующие числа, кратные 11
+            }
+        }
+    }
+
+    if (foundFirst) {
+        cout << "Результат (первое число минус все последующие кратные 11): " << result << endl;
+        cout << "Количество чисел, кратных 11: " << count << endl;
+    }
+    else {
+        cout << "Нет чисел, кратных 11." << endl;
+    }
+
+    return 0;
+}
+
+//ЗАДАНИЕ 2
+/*
+#include <iostream>
+#include <cstdlib>  // Для rand() и srand()
+#include <ctime>    // Для time()
+
+using namespace std;
+
+int main() {
+    setlocale(LC_ALL, "RU");
+    const int SIZE = 10;
+    double A[SIZE];
+
+    srand(time(0)); // Инициализация генератора случайных чисел
+
+    // Заполнение массива случайными числами от -5.0 до 5.0
+    for (double* ptr = A; ptr < A + SIZE; ptr++) {
+        *ptr = static_cast<double>(rand() % 1000) / 100.0 - 5.0; // Генерация числа в диапазоне [-5.0, 5.0]
+    }
+
+    // Подсчет количества нулевых элементов
+    int zeroCount = 0;
+    for (double* ptr = A; ptr < A + SIZE; ptr++) {
+        if (*ptr == 0.0) {
+            zeroCount++;
+        }
+    }
+
+    // Вывод массива
+    cout << "Сгенерированный массив: ";
+    for (double* ptr = A; ptr < A + SIZE; ptr++) {
+        cout << *ptr << " ";
+    }
+    cout << endl;
+
+    // Вывод результата
+    cout << "Количество элементов, равных 0: " << zeroCount << endl;
+
+    return 0;
+}
+*/
