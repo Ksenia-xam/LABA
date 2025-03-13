@@ -1,0 +1,85 @@
+#include <iostream>;
+#include <cmath>;
+#include < ctime>;
+#include <cstdlib>;
+using namespace std;
+int main() {
+	setlocale(0, "rus");
+	int size;
+	cout << "Введите размер массива: ";
+	while (!(cin>>size) || (size <= 0)) {
+		cin.clear();
+		cin.ignore(100000, '\n');
+		cout << "Ошибка! Введите корректное число: ";
+	}
+	double* A = new double[size];
+	srand(time(0));
+	for (int i = 0; i < size; ++i){
+		A[i] = (rand() % 200 - 100) + rand() / (RAND_MAX + 1.0);
+	}
+	cout << "Массив: ";
+	for (int i = 0; i < size; ++i){
+		cout << A[i] << " ";
+	}
+	cout << endl;
+	int max_index = 0;
+	int min_index = 0;
+	for (int i = 1; i < size; i++) {
+		if (fabs(A[i]) > fabs(A[max_index])) {
+			max_index = i;
+		}
+		if (A[i]<A[min_index]){
+			min_index = i;
+		}
+	}
+	double sum = 0;
+	for (int i = min_index+1; i < size;++i){
+		sum+=A[i];
+	}
+	cout<<"Номер максимального по модулю элемента: "<<max_index<<endl;
+	cout << "Сумма элементов после минимального: " << sum << endl;
+	double a, b;
+	cout << "ВВедите границы [a,b]: ";
+	while (!(cin >> a >> b) || (a > b)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "Ошибка! Введите корректные границы: ";
+	}
+	int countIn = 0, countOut = 0;
+	for (int i = 0; i < size; ++i) {
+		if (floor(A[i]) >= a && floor(A[i]) <= b) {
+			countIn++;
+		}
+		else {
+			countOut++;
+		}
+	}
+	double* in_range = new double[countIn];
+	double* out_range = new double[countOut];
+	int indIn = 0, indOut = 0;
+	for (int i = 0; i < size; ++i) {
+		if (floor(A[i]) >= a && floor(A[i]) <= b) {
+			in_range[indIn++] = A[i];
+		}
+		else {
+			out_range[indOut++] = A[i];
+		}
+	}
+	int index = 0;
+	for (int i = 0; i < countIn; i++) {
+		A[index++] = in_range[i];
+	}
+	for (int i = 0; i < countOut; i++) {
+		A[index++] = out_range[i];
+	}
+	cout << "Преобразованный массив: ";
+	for (int i = 0; i < size; ++i) {
+		cout << A[i] << " ";
+	}
+	cout << endl;
+	delete[] in_range;
+	delete[] out_range;
+	delete[] A;
+	return 0;
+
+}
