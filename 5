@@ -1,0 +1,129 @@
+1.
+#include <iostream>;
+using namespace std;
+
+double P(int n, double*  arr) {
+	double s=1;
+	for (int i = 1; i < n; i++) {
+		if (arr[i] == arr[n]) {
+			break;
+		}
+		s *= arr[i];
+	}
+	return s;
+}
+double* Sum(int n, double* arr1, double* arr2) {
+	double* H=new double[n];
+	for (int i = 0; i < n ; i++) {
+		H[i] = arr1[i] + arr2[i];
+	}
+	return H;
+}
+
+int main() {
+	double S = 0;
+	int size = 0;
+	setlocale(0, "rus");
+	cout << "Введите размер массива: ";
+	while (!(cin >> size) || size <= 0) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "Ошибка! Введите корректный размер массива." << endl;
+	}
+	double* A = new double[size];
+	double* B = new double[size];
+	for (int i = 0; i < size; i++) {
+		cout << "Введите элемент массива А " << i + 1 << ": ";
+		while (!(cin >> A[i])) {
+			cout << "Ошибка! Значения должны быть числами. ";
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+	}
+	for (int i = 0; i < size; i++) {
+		cout << "Введите элемент массива B " << i + 1 << ": ";
+		while (!(cin >> B[i])) {
+			cout << "Ошибка! Значения должны быть числами. ";
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+	}
+	cout << "Массив А: ";
+	for (int i = 0; i < size; i++) {
+		cout<< A[i] << ' ';
+	}
+	cout << endl;
+	cout << "Массив B: ";
+	for (int i = 0; i < size; i++) {
+		cout<< B[i] << ' ';
+	}
+	cout << endl;
+	if (P(size, B) > 0) {
+		S = P(size, A);
+	}
+	if (P(size, B) <= 0) {
+		S = P(size, Sum(size, A, B));
+	}
+	cout << "Резульат S: " << S;
+	cout << endl;
+	return 0;
+}
+2.
+#include <iostream>;
+using namespace std;
+int Sign(float X) {
+	int i = 0;
+	if (X < 0) {
+		i = -1;
+	}
+	if (X == 0.0) {
+		i = 0;
+	}
+	if (X > 0) {
+		i = 1;
+	}
+	return i;
+}
+int main() {
+	setlocale(0, "rus");
+	cout << "Введите вещественное число A: ";
+	float A;
+	float B;
+	while (!(cin >> A)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "Ошибка! Введите корректное вещественное число A. " << endl;
+	}
+	cout << "Введите вещественное число B: ";
+	while (!(cin >> B)){
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "Ошибка! Введите корректное вещественное число B. " << endl;
+	}
+	cout << "Сумма двух функций от А и В: " << endl;
+	cout << Sign(A) + Sign(B);
+	return 0;
+}
+3.
+#include <iostream>;
+using namespace std;
+void Reverse(int x) {
+	if (x== 0) {
+		return;
+	}
+	cout << x % 10 << endl;
+	Reverse(x / 10);
+}
+int main() {
+	setlocale(0, "rus");
+	int N;
+	cout << "Введите натуральное число N: " << endl;
+	while (!(cin >> N) || N <= 0) {
+		cin.clear();
+		cin.ignore(10000,'\n');
+		cout << "Введено некорректное число. "<< endl;
+	}
+	cout << "Цифры по одной в обратном порядке" << endl;
+	Reverse(N);
+	return 0;
+}
