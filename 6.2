@@ -1,0 +1,65 @@
+#include "functions.h"
+
+bool passedAllExams(int grade1, int grade2, int grade3) {
+    return grade1 >= 3 && grade2 >= 3 && grade3 >= 3;
+}
+
+void processStudentGrades(const string& inputFileName, const string& outputFileName) {
+    ifstream inputFile(inputFileName);
+    ofstream outputFile(outputFileName);
+
+    if (!inputFile || !outputFile) {
+        cerr << "Ошибка при открытии файлов!" << endl;
+        return;
+    }
+
+    string line;
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string surname;
+        int grade1, grade2, grade3;
+        char dash, comma;
+
+        ss >> surname >> dash >> grade1 >> comma >> grade2 >> comma >> grade3;
+
+        if (passedAllExams(grade1, grade2, grade3)) {
+            outputFile << surname << endl;
+        }
+    }
+
+    inputFile.close();
+    outputFile.close();
+}
+
+
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+bool passedAllExams(int grade1, int grade2, int grade3);
+
+void processStudentGrades(const string& inputFileName, const string& outputFileName);
+
+#endif
+
+
+#include "functions.h"
+#include "functions.cpp"
+
+
+int main() {
+    string inputFileName = "list.txt";
+    string outputFileName = "result.txt";
+
+    processStudentGrades(inputFileName, outputFileName);
+
+    cout << "Фамилии студентов, успешно сдавших экзамены, записаны в result.txt" << endl;
+    return 0;
+}
+
