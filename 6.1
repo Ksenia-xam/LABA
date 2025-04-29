@@ -1,0 +1,150 @@
+#include "train.h"
+
+void generateTrains(vector<TRAIN>& trains, int count) {
+    vector<string> destinations = { "Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Сочи" };
+    srand(time(nullptr));
+
+    for (int i = 0; i < count; ++i) {
+        TRAIN t;
+        t.NAZN = destinations[rand() % destinations.size()];
+        t.NUMR = 1000 + rand() % 9000;
+
+        int hour = rand() % 24;
+        int minute = rand() % 60;
+        t.TIME = (hour < 10 ? "0" : "") + to_string(hour) + ":" + (minute < 10 ? "0" : "") + to_string(minute);
+
+        trains.push_back(t);
+    }
+}
+
+void displayTrains(const vector<TRAIN>& trains) {
+    cout << "\nСписок поездов:\n";
+    for (const auto& train : trains) {
+        cout << "Поезд №" << train.NUMR << " — " << train.NAZN << " — Время отправления: " << train.TIME << "\n";
+    }
+}
+
+void sortTrainsByNumber(vector<TRAIN>& trains) {
+    sort(trains.begin(), trains.end(), [](const TRAIN& a, const TRAIN& b) {
+        return a.NUMR < b.NUMR;
+        });
+}
+
+void searchTrainByNumber(const vector<TRAIN>& trains, int number) {
+    bool found = false;
+    for (const auto& train : trains) {
+        if (train.NUMR == number) {
+            cout << "Поезд найден: №" << train.NUMR << " — " << train.NAZN << " — Время: " << train.TIME << "\n";
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Поезд с номером " << number << " не найден.\n";
+    }
+}
+
+void saveToFile(const vector<TRAIN>& trains, const string& filename) {
+    ofstream out(filename);
+    for (const auto& train : trains) {
+        out << train.NAZN << ";" << train.NUMR << ";" << train.TIME << "\n";
+    }
+    out.close();
+}
+
+void loadFromFile(vector<TRAIN>& trains, const string& filename) {
+    ifstream in(filename);  
+    if (!in) return;        
+    string line;
+    while (getline(in, line)) {  
+        stringstream ss(line);  
+        TRAIN t;
+        getline(ss, t.NAZN, ';');  
+        string numStr;
+        getline(ss, numStr, ';');  
+        t.NUMR = stoi(numStr);     
+        getline(ss, t.TIME, ';');  
+
+        trains.push_back(t);  
+    }
+
+    in.close();  
+}
+
+int getValidatedInt(const string& prompt) {
+    int value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (!cin.fail() && value > 0) {
+            return value;
+        }
+
+        cout << "Ошибка ввода. Введите положительное число.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+}
+
+
+
+#ifndef TRAIN_H
+#define TRAIN_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <limits>
+#include <ctime>
+#include <sstream>;
+#include <cstdlib>
+
+using namespace std;
+
+struct TRAIN {
+    string NAZN; // Название пункта назначения
+    int NUMR;    // Номер поезда
+    string TIME; // Время отправления (в формате HH:MM)
+};
+
+// Прототипы функций
+void generateTrains(vector<TRAIN>& trains, int count);
+void displayTrains(const vector<TRAIN>& trains);
+void sortTrainsByNumber(vector<TRAIN>& trains);
+void searchTrainByNumber(const vector<TRAIN>& trains, int number);
+void saveToFile(const vector<TRAIN>& trains, const string& filename);
+void loadFromFile(vector<TRAIN>& trains, const string& filename);
+bool isValidTime(const string& timeStr);
+int getValidatedInt(const string& prompt);
+
+#endif // TRAIN_H
+
+
+
+#include "train.h"
+
+int main() {
+    setlocale(0, "rus");
+    vector<TRAIN> RASP;
+    int n;
+
+    cout << "Введите количество поездов: ";
+    n = getValidatedInt("> ");
+
+    generateTrains(RASP, n);
+    sortTrainsByNumber(RASP);
+
+    displayTrains(RASP);
+
+    string filename = "trains.txt";
+    saveToFile(RASP, filename);
+
+    int searchNum;
+    cout << "\nВведите номер поезда для поиска: ";
+    searchNum = getValidatedInt("> ");
+    searchTrainByNumber(RASP, searchNum);
+
+    return 0;
+}
